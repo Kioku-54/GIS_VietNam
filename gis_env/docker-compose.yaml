@@ -1,0 +1,59 @@
+version: '3.1'
+
+volumes:
+   postgis_db_data:
+   geoserver_data:
+
+services:
+   gis_db:
+      image: postgis/postgis:15-3.3
+      volumes:
+         - postgis_db_data:/var/lib/postgresql/data
+      ports:
+         - 5432:5432
+      environment:
+         POSTGRES_PASSWORD: docker
+      restart: "no"
+      networks:
+         gisnet:
+            aliases:
+               - postgis15.docker
+   
+   geoserver:
+      image: kartoza/geoserver:latest
+      volumes:
+         - geoserver_data:/opt/geoserver/data_dir
+      ports:
+         - 8080:8080
+      restart: "no"
+      environment:
+         - GEOSERVER_ADMIN_PASSWORD=admin
+         - GEOSERVER_ADMIN_USER=geoserver
+      depends_on:
+         - gis_db
+      networks:
+         gisnet:
+            aliases:
+               - geoserver.docker
+
+   pgadmin4:
+      image: dpage/pgadmin4
+      ports:
+         - 5480:80
+      restart: "no"
+      environment:
+         PGADMIN_DEFAULT_EMAIL: docker@gmail.com
+         PGADMIN_DEFAULT_PASSWORD: docker
+         PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION: "True"
+         PGADMIN_CONFIG_CONSOLE_LOG_LEVEL: 10
+      depends_on:
+         - gis_db
+      networks:
+         gisnet:
+            aliases:
+               - pgqdmin4.docker
+
+networks:
+   gisnet:
+      external:
+         name: gisnet
