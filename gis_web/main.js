@@ -1,6 +1,6 @@
 var mapView = new ol.View ({
-    center: ol.proj.fromLonLat([107.7514833, 16.4840947]),
-    zoom: 6.7
+    center: ol.proj.fromLonLat([108.0788141,15.8233579]),
+    zoom: 6.3
 });
 
 var map = new ol.Map ({
@@ -53,4 +53,18 @@ var wardsTile = new ol.layer.Tile({
     })
 });
 
-map.addLayer(wardsTile);
+// map.addLayer(wardsTile);
+
+// LayerSwitcher
+
+var toggleLayer = (e) => {
+    var layrName = e.target.value;
+    var currentStatus = e.target.checked;
+    var lyrList = map.getLayers();
+
+    lyrList.forEach(lyr => {
+        if (layrName === lyr.get('title')) {
+            lyr.setVisible(currentStatus);
+        }
+    });
+}

@@ -4,11 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebGIS VietNam Administrative</title>
-    <link rel="stylesheet" href="./main.css">
     <link rel="stylesheet" href="./resources/ol/ol.css">
+    <link rel="stylesheet" href="./main.css">
 </head>
 <body>
-    <div id="map"></div>
+    <div class="flex-container">
+        <div class="header-component">
+            <span>Viet Nam Adminstrative Data</span>
+        </div>
+        <div class="body-component">
+            <div class="left-component">
+                <div id="map"></div>
+            </div>
+            <div class="right-component">
+                <div class="title">
+                    <span>Layer Controller</span>
+                </div>
+                <div class="form">
+                    <div class="form-option">
+                        <div class="checkbox">
+                            <input type="checkbox" name="osm" value="Open Street Map" checked onchange="toggleLayer(event)">
+                        </div>
+                        <div class="label">Open Street Map</div>
+                    </div>
+                    <div class="form-option">
+                        <div class="checkbox">
+                            <input type="checkbox" name="provinces" value="VietNam Province" checked onchange="toggleLayer(event)">
+                        </div>
+                        <div class="label">Provinces</div>
+                    </div>
+                    <div class="form-option">
+                        <div class="checkbox">
+                            <input type="checkbox" name="districts" value="VietNam District" checked onchange="toggleLayer(event)">
+                        </div>
+                        <div class="label">Districts</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="./resources/ol/ol.js"></script>
     <script src="./main.js"></script>
 </body>
