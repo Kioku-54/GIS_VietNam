@@ -93,3 +93,65 @@ body {
 .label {
     flex: 1 1 75%;
 }
+/* Popup Information */
+.ol-popup {
+    position: absolute;
+    bottom: 12px;
+    left: -50px;
+    color: white;
+    padding: 15px;
+    min-width: 280px;
+    border-radius: 10px;
+    background-color: #323b4b;
+    border: solid 2px white;
+    box-shadow: rgb(38, 57, 77) 0px 20px 30px -10px;
+}
+.popup-title{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 30px;
+}
+.popup-info {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+}
+.popup-info-key {
+    flex: 1 1 50%;
+}
+.popup-info-value {
+    flex: 1 1 50%;
+}
+.ol-popup:after, .ol-popup::before {
+    top: 100%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+.ol-popup:after {
+    border-top-color: white;
+    border-width: 10px;
+    left: 48px;
+    margin-left: -10px;
+}
+.ol-popup::before {
+    border-top-color: white;
+    border-width: 11px;
+    left: 48px;
+    margin-left: -11px;
+}
+.ol-popup-closer {
+    text-decoration: none;
+    font-weight: 700;
+    color: white;
+    position: absolute;
+    top: 5px;
+    right: 8px;
+}
+.ol-popup-closer::after {
+    content: "X"
+}

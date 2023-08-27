@@ -10,6 +10,7 @@ var map = new ol.Map ({
     view: mapView
 });
 
+// Add Tiles Map
 var osmTile = new ol.layer.Tile ({
     title: 'Open Street Map',
     source: new ol.source.OSM(),
@@ -27,7 +28,7 @@ var satelliteTile = new ol.layer.Tile({
 map.addLayer(osmTile);
 map.addLayer(satelliteTile);
 
-// Add Province Layer
+// Add Layers
 var provinceTile = new ol.layer.Tile({
     title: "VietNam Province",
     source: new ol.source.TileWMS({
@@ -38,9 +39,6 @@ var provinceTile = new ol.layer.Tile({
     })
 });
 
-map.addLayer(provinceTile);
-
-// Add District Layer
 var districtsTile = new ol.layer.Tile({
     title: "VietNam District",
     source: new ol.source.TileWMS({
@@ -51,9 +49,6 @@ var districtsTile = new ol.layer.Tile({
     })
 });
 
-map.addLayer(districtsTile);
-
-// Add Ward Layer
 var wardsTile = new ol.layer.Tile({
     title: "VietNam Wards",
     source: new ol.source.TileWMS({
@@ -64,7 +59,10 @@ var wardsTile = new ol.layer.Tile({
     })
 });
 
+map.addLayer(provinceTile);
+map.addLayer(districtsTile);
 // map.addLayer(wardsTile);
+
 // Basemap Controller
 var toggleTilemap = (e) => {
     var tileList = ['Open Street Map', 'Satellite Map']
@@ -93,3 +91,91 @@ var toggleLayer = (e) => {
         }
     });
 }
+
+// Popup Controller
+var container = document.getElementById('popup');
+var closer = document.getElementById('popup-closer');
+var content = document.getElementById('popup-content');
+
+var getStatusTile = (tile) => {
+    return tile.getVisible();
+};
+
+var createUrlGetFeatureInfo = (currentTile, resolution, evt) => {
+    return currentTile.getSource().getFeatureInfoUrl(evt.coordinate, resolution, 'EPSG:3857', {
+        'INFO_FORMAT': 'application/json',
+        "property_name": 'Provinces'
+    });
+};
+
+var handleContentPopup = (type, props) => {
+    var content;
+    if (type === 'districts') {
+        content = `
+            <div class='popup-title'>
+                <h3>District Information</h3> 
+            </div>
+            <div class='popup-info'>
+                <div class='popup-info-key'> Province Name: </div> 
+                <div class='popup-info-value'>${props.name_1}</div>
+            </div>
+            <div class='popup-info'>
+                <div class='popup-info-key'> District Name: </div>
+                <div class='popup-info-value'>${props.name_2}</div>
+            </div>
+        `
+    } else if (type === 'provinces') {
+        content = `
+            <div class='popup-title'>
+                <h3>District Information</h3> 
+            </div>
+            <div class='popup-info'>
+                <div class='popup-info-key'> Province Name: </div> 
+                <div class='popup-info-value'>${props.name_1}</div>
+            </div>
+        `
+    }
+    return content
+};
+
+var popup = new ol.Overlay({
+    element: container,
+    autoPan: true,
+    autoPanAnimation: {
+        duration: 250,
+    }
+});
+
+closer.onclick = () => {
+    popup.setPosition(undefined);
+    closer.blur();
+    return false;
+};
+
+map.addOverlay(popup);
+
+map.on('singleclick', (evt) => {
+    content.innerHTML = '';
+    popup.setPosition(undefined);
+    var url = '';
+    var resolution = map.getView().getResolution();
+    var provTileStatus = getStatusTile(provinceTile);
+    var distTileStatus = getStatusTile(districtsTile);
+
+    if (distTileStatus) {
+        url = createUrlGetFeatureInfo(districtsTile, resolution, evt);
+    } else if (provTileStatus) {
+        url = createUrlGetFeatureInfo(provinceTile, resolution, evt);
+    }
+
+    if (url !== '') {
+        $.getJSON(url, (data) => {
+            var feature = data.features[0];
+            var props = feature?.properties;
+            content.innerHTML = distTileStatus ? handleContentPopup('districts', props) : handleContentPopup('provinces', props);
+            popup.setPosition(evt.coordinate);
+        })
+    } else {
+        popup.setPosition(undefined);
+    }
+});
