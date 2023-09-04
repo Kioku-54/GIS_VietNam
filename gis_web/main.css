@@ -51,6 +51,32 @@ body {
     height: 100%;
 }
 
+.mouse-position {
+    position: fixed;
+    top: auto;
+    right: auto;
+    left: 30%;
+    bottom: 10px;
+    font-size: 12px;
+    color: #ffffff;
+    padding: 10px 15px;
+    border-radius: 25px;
+    transform: translateX(50%);
+    background-color: #323b4b;
+    border: 2px solid #ffffff;
+}
+.scale-line {
+    position: fixed;
+    top: auto;
+    right: auto;
+    bottom: 10px;
+    left: 10px;
+    background-color: #323b4b;
+    border: 2px solid #ffffff;
+    font-size: 12px;
+    color: #ffffff;
+}
+
 /* Layer Control Component */
 .right-component {
     flex: 1 1 20%;

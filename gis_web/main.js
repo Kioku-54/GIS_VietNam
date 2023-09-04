@@ -179,3 +179,21 @@ map.on('singleclick', (evt) => {
         popup.setPosition(undefined);
     }
 });
+
+// Mouse Position
+var mousePosition = new ol.control.MousePosition({
+    className: 'mouse-position',
+    projection: 'EPSG:4326',
+    coordinateFormat: (coordinate) => {
+        return ol.coordinate.format(coordinate, '{y}, {x}', 6);
+    }
+})
+map.addControl(mousePosition);
+
+// Scale control
+var scaleControl = new ol.control.ScaleLine({
+    className: 'scale-line',
+    bar: true,
+    text:true
+});
+map.addControl(scaleControl);
