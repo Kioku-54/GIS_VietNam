@@ -207,3 +207,8 @@ body {
     display: block;
     margin: 10px auto auto 10px;
 }
+.feat-info-btn-el {
+    position: relative;
+    display: block;
+    margin: 1px auto auto 10px;
+}

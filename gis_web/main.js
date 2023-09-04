@@ -155,31 +155,6 @@ closer.onclick = () => {
 
 map.addOverlay(popup);
 
-map.on('singleclick', (evt) => {
-    content.innerHTML = '';
-    popup.setPosition(undefined);
-    var url = '';
-    var resolution = map.getView().getResolution();
-    var provTileStatus = getStatusTile(provinceTile);
-    var distTileStatus = getStatusTile(districtsTile);
-
-    if (distTileStatus) {
-        url = createUrlGetFeatureInfo(districtsTile, resolution, evt);
-    } else if (provTileStatus) {
-        url = createUrlGetFeatureInfo(provinceTile, resolution, evt);
-    }
-
-    if (url !== '') {
-        $.getJSON(url, (data) => {
-            var feature = data.features[0];
-            var props = feature?.properties;
-            content.innerHTML = distTileStatus ? handleContentPopup('districts', props) : handleContentPopup('provinces', props);
-            popup.setPosition(evt.coordinate);
-        })
-    } else {
-        popup.setPosition(undefined);
-    }
-});
 // Home Control
 var homeBtn = document.createElement('button');
 homeBtn.innerHTML = '<img src="resources/image/home-icon.svg" alt=" " style="width:25px;height:25px;filter:brightness(0) invert(1);vertical-align:middle"></img>';
@@ -197,7 +172,58 @@ homeBtn.addEventListener('click', () => {
     location.href = "index.html"
 });
 
-map.addControl(homeControl)
+map.addControl(homeControl);
+
+// Feature Infor Control
+var featInfoBtn = document.createElement('button');
+featInfoBtn.innerHTML = '<img src="resources/image/info-icon.svg" alt=" " style="width:25px;height:25px;filter:brightness(0) invert(1);vertical-align:middle"></img>';
+featInfoBtn.className = 'my-btn';
+featInfoBtn.id = 'feat-info-btn';
+
+var featInfoElement = document.createElement('div');
+featInfoElement.className = 'feat-info-btn-el';
+featInfoElement.appendChild(featInfoBtn);
+
+var featInfoControl = new ol.control.Control({
+    element: featInfoElement
+});
+
+var featInfoFlag = false;
+featInfoBtn.addEventListener('click', () => {
+    featInfoBtn.classList.toggle('clicked');
+    featInfoFlag = !featInfoFlag;
+});
+
+map.addControl(featInfoControl);
+
+map.on('singleclick', (evt) => {
+    if (featInfoFlag) {
+        content.innerHTML = '';
+        popup.setPosition(undefined);
+        var url = '';
+        var resolution = map.getView().getResolution();
+        var provTileStatus = getStatusTile(provinceTile);
+        var distTileStatus = getStatusTile(districtsTile);
+    
+        if (distTileStatus) {
+            url = createUrlGetFeatureInfo(districtsTile, resolution, evt);
+        } else if (provTileStatus) {
+            url = createUrlGetFeatureInfo(provinceTile, resolution, evt);
+        }
+    
+        if (url !== '') {
+            $.getJSON(url, (data) => {
+                var feature = data.features[0];
+                var props = feature?.properties;
+                content.innerHTML = distTileStatus ? handleContentPopup('districts', props) : handleContentPopup('provinces', props);
+                popup.setPosition(evt.coordinate);
+            })
+        } else {
+            popup.setPosition(undefined);
+        }
+    }
+});
+
 // Mouse Position
 var mousePosition = new ol.control.MousePosition({
     className: 'mouse-position',
