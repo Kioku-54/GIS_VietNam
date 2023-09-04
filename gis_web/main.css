@@ -181,3 +181,29 @@ body {
 .ol-popup-closer::after {
     content: "X"
 }
+/* Btn control */
+.my-btn {
+    background-color: rgba(50, 59, 75, 0.6);
+    color: #ffffff;
+    font-weight: 700;
+    text-align: center;
+    height: 30px;
+    width: 30px;
+    border-radius: 2px;
+    border: none;
+    align-items: center;
+}
+.my-btn:hover {
+    background-color: rgba(50, 59, 75, 1);
+}
+.my-btn.clicked {
+    background-color: rgba(22, 170, 35, 0.8);
+}
+.my-btn.clicked:hover {
+    background-color: rgba(22, 170, 35, 1);
+}
+.home-btn-el {
+    position: relative;
+    display: block;
+    margin: 10px auto auto 10px;
+}

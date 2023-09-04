@@ -7,7 +7,8 @@ var mapView = new ol.View ({
 
 var map = new ol.Map ({
     target: 'map',
-    view: mapView
+    view: mapView,
+    controls: []
 });
 
 // Add Tiles Map
@@ -179,7 +180,24 @@ map.on('singleclick', (evt) => {
         popup.setPosition(undefined);
     }
 });
+// Home Control
+var homeBtn = document.createElement('button');
+homeBtn.innerHTML = '<img src="resources/image/home-icon.svg" alt=" " style="width:25px;height:25px;filter:brightness(0) invert(1);vertical-align:middle"></img>';
+homeBtn.className = 'my-btn';
 
+var homeElement = document.createElement('div');
+homeElement.className = 'home-btn-el';
+homeElement.appendChild(homeBtn);
+
+var homeControl = new ol.control.Control({
+    element: homeElement
+})
+
+homeBtn.addEventListener('click', () => {
+    location.href = "index.html"
+});
+
+map.addControl(homeControl)
 // Mouse Position
 var mousePosition = new ol.control.MousePosition({
     className: 'mouse-position',
